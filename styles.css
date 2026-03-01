@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    color: var(--font-color-default);
+    font-size: var(--font-size);
+}
+
+input,
+textarea {
+    border: var(--component-border);
+    color: var(--font-color-default);
+    font-size: var(--font-size);
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+input:not([type="checkbox"]),
+textarea {
+    background: var(--component-background);
+    padding: var(--component-padding);
+    border-radius: var(--component-border-radius);
+}
+
+input:not([type="checkbox"], [type="button"]),
+textarea {
+    width: 100%;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--font-color-primary);
+}
+
+input[type="checkbox"] {
+    background: var(--font-color-default);
+    width: 1em;
+    height: 1em;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+}
+
+/* Change the background color when checkbox is checked */
+input[type="checkbox"]:checked {
+    background-color: var(--font-color-primary);
+    border: 1px solid var(--font-color-primary);
+}
+
+/* Add a check mark when checked */
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    width: 3px;
+    height: 7px;
+    border-width: 0 2px 2px 0;
+    transform: rotate(40deg);
+    border-color: white;
+    border-style: solid;
+}
+
+/****************************/
+/* END DEFAULT THEME STYLES */
+/****************************/
+
+.notes-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 8px;
+}
+
+.notes-input {
+    flex-shrink: 0;
+    resize: none;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.notes-list {
+    flex: 1;
+    overflow: auto;
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+}
+
+.notes-list li {
+    padding: 4px 0;
+    font-size: var(--font-size);
+    line-height: 1.4;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    cursor: pointer;
+    padding-left: 4px;
+    border-radius: 2px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.notes-list li:hover {
+    background: var(--component-background);
+}
+
+.notes-list li.action-mode {
+    background: var(--component-background-lighter);
+    padding: 4px;
+}
+
+.notes-list li.dragging {
+    opacity: 0.5;
+}
+
+.notes-list li.drag-over {
+    border-top: 2px solid var(--font-color-primary);
+}
+
+.notes-list li.editing {
+    background: var(--component-background);
+    outline: 1px solid var(--font-color-primary);
+    padding: 4px;
+}
+
+.note-text {
+    flex: 1;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.note-drag-handle {
+    display: none;
+    cursor: grab;
+    color: var(--font-color-secondary);
+    font-size: 18px;
+    user-select: none;
+    padding: 0 4px;
+    flex-shrink: 0;
+    touch-action: none;
+    -webkit-user-select: none;
+}
+
+.notes-list li.action-mode .note-drag-handle {
+    display: block;
+}
+
+.note-edit-btn,
+.note-delete-btn {
+    display: none;
+    border: none;
+    color: var(--font-color-default);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+.note-edit-btn {
+    background: var(--font-color-primary);
+}
+
+.note-edit-btn:hover {
+    background: #357abd;
+}
+
+.note-delete-btn {
+    background: #d32f2f;
+}
+
+.note-delete-btn:hover {
+    background: #b71c1c;
+}
+
+.notes-list li.action-mode .note-edit-btn,
+.notes-list li.action-mode .note-delete-btn {
+    display: block;
+}
+
+.notes-list li.editing .note-drag-handle,
+.notes-list li.editing .note-edit-btn,
+.notes-list li.editing .note-delete-btn {
+    display: none;
+}

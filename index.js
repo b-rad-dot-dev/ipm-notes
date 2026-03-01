@@ -1,6 +1,6 @@
-class IpmNotesModule {
+export default class IpmNotesModule {
   constructor(container, config) {
-    this.container = container;
+    this.wrapper = container;
     this.config = config;
     this.notes = this.loadNotes();
     this.actionModeId = null;
@@ -11,12 +11,21 @@ class IpmNotesModule {
   }
 
   async init() {
-    const response = await fetch('/modules/ipm-notes/module.html');
-    const html = await response.text();
-    this.container.innerHTML = html;
+    this.shadow = this.wrapper.attachShadow({ mode: "open" });
 
-    this.input = this.container.querySelector('.notes-input');
-    this.list = this.container.querySelector('.notes-list');
+    // Load CSS file
+    const cssText = await fetch(new URL("./styles.css", import.meta.url))
+        .then(res => res.text());
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(cssText);
+    this.shadow.adoptedStyleSheets = [sheet];
+
+    // Load HTML
+    const html = await fetch(new URL("./module.html", import.meta.url))
+    this.shadow.innerHTML = await html.text();
+
+    this.input = this.shadow.querySelector('.notes-input');
+    this.list = this.shadow.querySelector('.notes-list');
 
     this.input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -110,9 +119,9 @@ class IpmNotesModule {
     const lineCount = (note.text.match(/\n/g) || []).length + 1;
     const rows = Math.min(Math.max(lineCount, 1), 3);
 
-    listItem.innerHTML = `<textarea class="note-edit-input" rows="${rows}">${this.escapeHtml(note.text)}</textarea>`;
+    listItem.innerHTML = `<textarea rows="${rows}">${this.escapeHtml(note.text)}</textarea>`;
 
-    const textarea = listItem.querySelector('.note-edit-input');
+    const textarea = listItem.querySelector('textarea');
     textarea.focus();
     textarea.setSelectionRange(textarea.value.length, textarea.value.length);
 
@@ -144,8 +153,7 @@ class IpmNotesModule {
         <li data-id="${note.id}" class="${isActionMode ? 'action-mode' : ''}">
           <span class="note-drag-handle" draggable="true">☰</span>
           <span class="note-text">${this.escapeHtml(note.text)}</span>
-          <button class="note-edit-btn">Edit</button>
-          <button class="note-delete-btn">Delete</button>
+          <div><button class="note-edit-btn">Edit</button> <button class="note-delete-btn">Delete</button></div>
         </li>
       `;
     }).join('');
@@ -383,5 +391,3 @@ class IpmNotesModule {
     }
   }
 }
-
-window.IpmNotesModule = IpmNotesModule;
